@@ -1,0 +1,49 @@
+name: "Validation and Testing"
+
+# Triggered on all push events
+on:
+  push:
+    branches-ignore:
+      - master
+
+env:
+  AWS_DEFAULT_REGION: us-west-2
+  AWS_DEFAULT_OUTPUT: json
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+  terraform-review:
+    name: "Test"
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: "Setup - Checkout"
+        uses: actions/checkout@v2.1.0
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: "Setup - Terraform CLI"
+        uses: hashicorp/setup-terraform@v1
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+
+      - name: "Run - Terraform Init"
+        id: initialize
+        run: terraform init
+        working-directory: ./terraform
+
+      - name: "Run - Terraform fmt"
+        id: format
+        run: terraform fmt -check=true -diff=true
+        working-directory: ./terraform
+
+      - name: "Run - Terraform validate"
+        id: validate
+        run: terraform validate
+        working-directory: ./terraform
