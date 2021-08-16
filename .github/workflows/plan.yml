@@ -12,7 +12,35 @@ env:
 
 
 jobs:
-  terraform-plan:
+  terraform-plan-us-east-1:
+    name: "Terraform Plan"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Setup - Checkout"
+        uses: actions/checkout@v2.1.0
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: "us-east-1"
+
+      - name: "Setup - Terraform CLI"
+        uses: hashicorp/setup-terraform@v1.3.2
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+
+      - name: "Run - Terraform Init"
+        run: terraform init -input=false
+        working-directory: ./terraform/us-east-1
+
+      - name: "Run - Terraform Plan"
+        id: plan
+        run: terraform plan -input=false -no-color
+        working-directory: ./terraform/us-east-1
+
+  terraform-plan-us-west-2:
     name: "Terraform Plan"
     runs-on: ubuntu-latest
     steps:
@@ -33,9 +61,9 @@ jobs:
 
       - name: "Run - Terraform Init"
         run: terraform init -input=false
-        working-directory: ./terraform
+        working-directory: ./terraform/us-west-2
 
       - name: "Run - Terraform Plan"
         id: plan
         run: terraform plan -input=false -no-color
-        working-directory: ./terraform
+        working-directory: ./terraform/us-west-2
