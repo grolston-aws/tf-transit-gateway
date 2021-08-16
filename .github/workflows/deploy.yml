@@ -26,7 +26,7 @@ jobs:
         with:
           aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          aws-region: "us-east-1"
+          aws-region: ${{env.AWS_DEFAULT_REGION}}
 
       - name: "Setup - Terraform CLI"
         uses: hashicorp/setup-terraform@v1
