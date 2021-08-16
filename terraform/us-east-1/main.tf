@@ -7,7 +7,7 @@ terraform {
   backend "s3" {
     bucket = "tfstate-netops"
     key    = "tgw-us-east-1/terraform.tfstate"
-    region = "us-east-1"
+    region = "us-west-2"
   }
 }
 

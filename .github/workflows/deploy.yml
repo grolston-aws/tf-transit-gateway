@@ -15,7 +15,7 @@ env:
 jobs:
   terraform-apply-us-east-1:
     if: github.ref == 'refs/heads/master'
-    name: "Terraform Apply"
+    name: "Terraform Apply US-EAST-1"
     runs-on: ubuntu-latest
     steps:
       - name: "Setup - Checkout"
@@ -58,7 +58,7 @@ jobs:
 
   terraform-apply-us-west-2:
     if: github.ref == 'refs/heads/master'
-    name: "Terraform Apply"
+    name: "Terraform Apply US-WEST-2"
     runs-on: ubuntu-latest
     steps:
       - name: "Setup - Checkout"
