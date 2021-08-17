@@ -11,24 +11,19 @@ terraform {
   }
 }
 
-
-
-
 ###########################
 # Transit Gateway Section #
 ###########################
 
 # Transit Gateway
-## Default association and propagation are disabled since our scenario involves
-## a more elaborated setup where
-## - Dev and Stage VPC can reach themselves and the Shared VPC
-## - the Shared VPC can reach all VPCs
-## - the Prod VPC can only reach the Shared VPC
-## The default setup being a full mesh scenario where all VPCs can see every other
+
 resource "aws_ec2_transit_gateway" "poc-tgw" {
-  description                     = "Transit Gateway testing scenario with 4 VPCs, 2 subnets each"
-  default_route_table_association = "disable"
-  default_route_table_propagation = "disable"
+  description                     = "US-EAST-1 TGW POC"
+  default_route_table_association = "enable"
+  default_route_table_propagation = "enable"
+  amazon_side_asn                 = 64532
+  auto_accept_shared_attachments  = "enable"
+  dns_support                     = "enabled"
 
   tags = {
     Name     = "${var.scenario}"

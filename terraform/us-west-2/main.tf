@@ -12,23 +12,18 @@ terraform {
 }
 
 
-
-
 ###########################
 # Transit Gateway Section #
 ###########################
 
-# Transit Gateway
-## Default association and propagation are disabled since our scenario involves
-## a more elaborated setup where
-## - Dev and Stage VPC can reach themselves and the Shared VPC
-## - the Shared VPC can reach all VPCs
-## - the Prod VPC can only reach the Shared VPC
-## The default setup being a full mesh scenario where all VPCs can see every other
+## Transit Gateway
 resource "aws_ec2_transit_gateway" "poc-tgw" {
-  description                     = "Transit Gateway testing scenario with 4 VPCs, 2 subnets each"
-  default_route_table_association = "disable"
-  default_route_table_propagation = "disable"
+  description                     = "US-WEST-2 TGW POC"
+  default_route_table_association = "enable"
+  default_route_table_propagation = "enable"
+  amazon_side_asn                 = 64532
+  auto_accept_shared_attachments  = "enable"
+  dns_support                     = "enabled"
 
   tags = {
     Name     = "${var.scenario}"
@@ -42,8 +37,8 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-dev" {
   subnet_ids                                      = ["${aws_subnet.vpc-dev-sub-a.id}", "${aws_subnet.vpc-dev-sub-b.id}"]
   transit_gateway_id                              = aws_ec2_transit_gateway.poc-tgw.id
   vpc_id                                          = aws_vpc.vpc-dev.id
-  transit_gateway_default_route_table_association = false
-  transit_gateway_default_route_table_propagation = false
+  transit_gateway_default_route_table_association = true
+  transit_gateway_default_route_table_propagation = true
   tags = {
     Name     = "tgw-att-vpc-dev"
     scenario = "${var.scenario}"
@@ -55,8 +50,8 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-stage" {
   subnet_ids                                      = ["${aws_subnet.vpc-stage-sub-a.id}", "${aws_subnet.vpc-stage-sub-b.id}"]
   transit_gateway_id                              = aws_ec2_transit_gateway.poc-tgw.id
   vpc_id                                          = aws_vpc.vpc-stage.id
-  transit_gateway_default_route_table_association = false
-  transit_gateway_default_route_table_propagation = false
+  transit_gateway_default_route_table_association = true
+  transit_gateway_default_route_table_propagation = true
   tags = {
     Name     = "tgw-att-vpc-stage"
     scenario = "${var.scenario}"
@@ -68,8 +63,8 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-shared" {
   subnet_ids                                      = ["${aws_subnet.vpc-shared-sub-a.id}", "${aws_subnet.vpc-shared-sub-b.id}"]
   transit_gateway_id                              = aws_ec2_transit_gateway.poc-tgw.id
   vpc_id                                          = aws_vpc.vpc-shared.id
-  transit_gateway_default_route_table_association = false
-  transit_gateway_default_route_table_propagation = false
+  transit_gateway_default_route_table_association = true
+  transit_gateway_default_route_table_propagation = true
   tags = {
     Name     = "tgw-att-vpc-shared"
     scenario = "${var.scenario}"
@@ -81,8 +76,8 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-prod" {
   subnet_ids                                      = ["${aws_subnet.vpc-prod-sub-a.id}", "${aws_subnet.vpc-prod-sub-b.id}"]
   transit_gateway_id                              = aws_ec2_transit_gateway.poc-tgw.id
   vpc_id                                          = aws_vpc.vpc-prod.id
-  transit_gateway_default_route_table_association = false
-  transit_gateway_default_route_table_propagation = false
+  transit_gateway_default_route_table_association = true
+  transit_gateway_default_route_table_propagation = true
   tags = {
     Name     = "tgw-att-vpc-prod"
     scenario = "${var.scenario}"
