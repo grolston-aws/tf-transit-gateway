@@ -273,3 +273,86 @@ resource "aws_route_table" "vpc-prod-rtb" {
   }
   depends_on = ["aws_ec2_transit_gateway.poc-tgw"]
 }
+
+# VPC attachment
+
+resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-dev" {
+  subnet_ids                                      = ["${aws_subnet.vpc-dev-sub-a.id}", "${aws_subnet.vpc-dev-sub-b.id}"]
+  transit_gateway_id                              = aws_ec2_transit_gateway.poc-tgw.id
+  vpc_id                                          = aws_vpc.vpc-dev.id
+  transit_gateway_default_route_table_association = false
+  transit_gateway_default_route_table_propagation = false
+  tags = {
+    Name     = "tgw-att-vpc-dev"
+    scenario = "${var.scenario}"
+  }
+  depends_on = ["aws_ec2_transit_gateway.poc-tgw"]
+}
+
+resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-stage" {
+  subnet_ids                                      = ["${aws_subnet.vpc-stage-sub-a.id}", "${aws_subnet.vpc-stage-sub-b.id}"]
+  transit_gateway_id                              = aws_ec2_transit_gateway.poc-tgw.id
+  vpc_id                                          = aws_vpc.vpc-stage.id
+  transit_gateway_default_route_table_association = false
+  transit_gateway_default_route_table_propagation = false
+  tags = {
+    Name     = "tgw-att-vpc-stage"
+    scenario = "${var.scenario}"
+  }
+  depends_on = ["aws_ec2_transit_gateway.poc-tgw"]
+}
+
+resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-shared" {
+  subnet_ids                                      = ["${aws_subnet.vpc-shared-sub-a.id}", "${aws_subnet.vpc-shared-sub-b.id}"]
+  transit_gateway_id                              = aws_ec2_transit_gateway.poc-tgw.id
+  vpc_id                                          = aws_vpc.vpc-shared.id
+  transit_gateway_default_route_table_association = false
+  transit_gateway_default_route_table_propagation = false
+  tags = {
+    Name     = "tgw-att-vpc-shared"
+    scenario = "${var.scenario}"
+  }
+  depends_on = ["aws_ec2_transit_gateway.poc-tgw"]
+}
+
+resource "aws_ec2_transit_gateway_vpc_attachment" "tgw-att-vpc-prod" {
+  subnet_ids                                      = ["${aws_subnet.vpc-prod-sub-a.id}", "${aws_subnet.vpc-prod-sub-b.id}"]
+  transit_gateway_id                              = aws_ec2_transit_gateway.poc-tgw.id
+  vpc_id                                          = aws_vpc.vpc-prod.id
+  transit_gateway_default_route_table_association = false
+  transit_gateway_default_route_table_propagation = false
+  tags = {
+    Name     = "tgw-att-vpc-prod"
+    scenario = "${var.scenario}"
+  }
+  depends_on = ["aws_ec2_transit_gateway.poc-tgw"]
+}
+
+# Route Tables
+
+resource "aws_ec2_transit_gateway_route_table" "tgw-dev-rt" {
+  transit_gateway_id = aws_ec2_transit_gateway.poc-tgw.id
+  tags = {
+    Name     = "tgw-dev-rt"
+    scenario = "${var.scenario}"
+  }
+  depends_on = ["aws_ec2_transit_gateway.poc-tgw"]
+}
+
+resource "aws_ec2_transit_gateway_route_table" "tgw-shared-rt" {
+  transit_gateway_id = aws_ec2_transit_gateway.poc-tgw.id
+  tags = {
+    Name     = "tgw-shared-rt"
+    scenario = "${var.scenario}"
+  }
+  depends_on = ["aws_ec2_transit_gateway.poc-tgw"]
+}
+
+resource "aws_ec2_transit_gateway_route_table" "tgw-prod-rt" {
+  transit_gateway_id = aws_ec2_transit_gateway.poc-tgw.id
+  tags = {
+    Name     = "tgw-prod-rt"
+    scenario = "${var.scenario}"
+  }
+  depends_on = ["aws_ec2_transit_gateway.poc-tgw"]
+}
