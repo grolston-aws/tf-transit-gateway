@@ -14,10 +14,10 @@ resource "aws_ec2_transit_gateway_route_table" "tgw-dev-rt" {
 ## The Route Tables Associations do not represent the actual routes the packets are routed to.
 ## These are defined in the Route Tables Propagations section below.
 
-resource "aws_ec2_transit_gateway_route_table_association" "tgw-rt-vpc-dev-assoc" {
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-dev.id
-  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw-dev-rt.id
-}
+# resource "aws_ec2_transit_gateway_route_table_association" "tgw-rt-vpc-dev-assoc" {
+#   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgw-att-vpc-dev.id
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw-dev-rt.id
+# }
 
 # Route Tables Propagations
 ## This section defines which VPCs will be routed from each Route Table created in the Transit Gateway
