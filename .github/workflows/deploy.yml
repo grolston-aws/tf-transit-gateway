@@ -55,13 +55,13 @@ jobs:
         working-directory: ./terraform/us-east-1
 
       - name: "Run - Terraform Plan"
-        if: steps.changes.outputs.src == 'true'
+        #if: steps.changes.outputs.src == 'true'
         id: plan
         run: terraform plan -input=false -no-color
         working-directory: ./terraform/us-east-1
 
       - name: "Run - Terraform Apply"
-        if: steps.changes.outputs.src == 'true'
+        #if: steps.changes.outputs.src == 'true'
         id: deploy
         run: terraform apply -input=false -auto-approve
         working-directory: ./terraform/us-east-1
@@ -108,13 +108,13 @@ jobs:
         working-directory: ./terraform/us-west-2
 
       - name: "Run - Terraform Plan"
-        if: steps.changes.outputs.src == 'true'
+        #if: steps.changes.outputs.src == 'true'
         id: plan
         run: terraform plan -input=false -no-color
         working-directory: ./terraform/us-west-2
 
       - name: "Run - Terraform Apply"
-        if: steps.changes.outputs.src == 'true'
+        #if: steps.changes.outputs.src == 'true'
         id: deploy
         run: terraform apply -input=false -auto-approve
         working-directory: ./terraform/us-west-2
