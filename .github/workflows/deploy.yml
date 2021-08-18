@@ -60,11 +60,11 @@ jobs:
         run: terraform plan -input=false -no-color
         working-directory: ./terraform/us-east-1
 
-      # - name: "Run - Terraform Apply"
-      #   if: steps.changes.outputs.src == 'true'
-      #   id: deploy
-      #   run: terraform apply -input=false -auto-approve
-      #   working-directory: ./terraform/us-east-1
+      - name: "Run - Terraform Apply"
+        if: steps.changes.outputs.src == 'true'
+        id: deploy
+        run: terraform apply -input=false -auto-approve
+        working-directory: ./terraform/us-east-1
 
   terraform-apply-us-west-2:
     if: github.ref == 'refs/heads/master'
@@ -113,7 +113,8 @@ jobs:
         run: terraform plan -input=false -no-color
         working-directory: ./terraform/us-west-2
 
-      # - name: "Run - Terraform Apply"
-      #   if: steps.changes.outputs.src == 'true'
-      #   run: terraform apply -input=false -auto-approve
-      #   working-directory: ./terraform/us-west-2
+      - name: "Run - Terraform Apply"
+        if: steps.changes.outputs.src == 'true'
+        id: deploy
+        run: terraform apply -input=false -auto-approve
+        working-directory: ./terraform/us-west-2
