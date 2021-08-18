@@ -22,7 +22,7 @@ resource "aws_ec2_transit_gateway" "poc-tgw" {
   default_route_table_propagation = "enable"
   amazon_side_asn                 = 64532
   auto_accept_shared_attachments  = "enable"
-  dns_support                     = "enabled"
+  dns_support                     = "enable"
 
   tags = {
     Name     = "${var.scenario}"
