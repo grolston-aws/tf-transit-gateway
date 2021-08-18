@@ -21,7 +21,7 @@ resource "aws_ec2_transit_gateway" "poc-tgw" {
   description                     = "US-EAST-1 TGW POC"
   default_route_table_association = "enable"
   default_route_table_propagation = "enable"
-  amazon_side_asn                 = 64532
+  amazon_side_asn                 = 64533
   auto_accept_shared_attachments  = "enable"
   dns_support                     = "enable"
 
