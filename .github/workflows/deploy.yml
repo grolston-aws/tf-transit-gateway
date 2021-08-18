@@ -64,6 +64,13 @@ jobs:
       - name: "Setup - Checkout"
         uses: actions/checkout@v2.1.0
 
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            src:
+              - 'terraform/us-west-2/**'
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -91,6 +98,7 @@ jobs:
         working-directory: ./terraform/us-west-2
 
       - name: "Run - Terraform Plan"
+        if: steps.changes.outputs.src == 'true'
         id: plan
         run: terraform plan -input=false -no-color
         working-directory: ./terraform/us-west-2
