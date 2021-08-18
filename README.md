@@ -2,7 +2,6 @@
 
 POC for using Terraform to manage transit-gateway
 
-
 ## Phase One
 
 Deployed in US-EAST-1 and US-WEST-2:
