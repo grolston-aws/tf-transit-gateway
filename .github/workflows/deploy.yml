@@ -21,6 +21,13 @@ jobs:
       - name: "Setup - Checkout"
         uses: actions/checkout@v2.1.0
 
+      - uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          filters: |
+            src:
+              - './terraform/us-east-1/**'
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -48,11 +55,14 @@ jobs:
         working-directory: ./terraform/us-east-1
 
       - name: "Run - Terraform Plan"
+        if: steps.changes.outputs.src == 'true'
         id: plan
         run: terraform plan -input=false -no-color
         working-directory: ./terraform/us-east-1
 
       # - name: "Run - Terraform Apply"
+      #   if: steps.changes.outputs.src == 'true'
+      #   id: deploy
       #   run: terraform apply -input=false -auto-approve
       #   working-directory: ./terraform/us-east-1
 
@@ -69,7 +79,7 @@ jobs:
         with:
           filters: |
             src:
-              - 'terraform/us-west-2/**'
+              - './terraform/us-west-2/**'
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -104,5 +114,6 @@ jobs:
         working-directory: ./terraform/us-west-2
 
       # - name: "Run - Terraform Apply"
+      #   if: steps.changes.outputs.src == 'true'
       #   run: terraform apply -input=false -auto-approve
       #   working-directory: ./terraform/us-west-2
