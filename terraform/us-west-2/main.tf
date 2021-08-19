@@ -37,3 +37,11 @@ resource "aws_ec2_transit_gateway_peering_attachment_accepter" "accept_peer_us_e
     Name = "Accept request from US-EAST-1"
   }
 }
+
+resource "aws_ec2_transit_gateway_peering_attachment_accepter" "accept_peer_us_east_2" {
+  transit_gateway_attachment_id = "tgw-attach-0667a6a38946d254a"
+
+  tags = {
+    Name = "Accept request from US-EAST-2"
+  }
+}
