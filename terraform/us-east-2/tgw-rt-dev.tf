@@ -1,12 +1,4 @@
 
-resource "aws_ec2_transit_gateway_route_table" "tgw-nonprod-rt" {
-  transit_gateway_id = aws_ec2_transit_gateway.poc-tgw.id
-  tags = {
-    Name     = "tgw-nonprod-rt"
-    scenario = "${var.scenario}"
-  }
-  depends_on = ["aws_ec2_transit_gateway.poc-tgw"]
-}
 
 # Route Tables Associations
 ## This is the link between a VPC (already symbolized with its attachment to the Transit Gateway)
