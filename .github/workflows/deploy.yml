@@ -121,7 +121,7 @@ jobs:
 
   terraform-apply-us-east-2:
     if: github.ref == 'refs/heads/master'
-    name: "Terraform Apply US-EAST-2
+    name: "Terraform Apply US-EAST-2"
     runs-on: ubuntu-latest
     steps:
       - name: "Setup - Checkout"
