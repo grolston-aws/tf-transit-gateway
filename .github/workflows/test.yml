@@ -82,3 +82,38 @@ jobs:
         id: validate
         run: terraform validate
         working-directory: ./terraform/us-west-2
+
+  terraform-review-us-east-2:
+    name: "Test US-EAST-2"
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: "Setup - Checkout"
+        uses: actions/checkout@v2.1.0
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_DEFAULT_REGION }}
+
+      - name: "Setup - Terraform CLI"
+        uses: hashicorp/setup-terraform@v1
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+
+      - name: "Run - Terraform Init"
+        id: initialize
+        run: terraform init
+        working-directory: ./terraform/us-east-2
+
+      - name: "Run - Terraform fmt us-east-1"
+        id: format
+        run: terraform fmt -check=true -diff=true
+        working-directory: ./terraform/us-east-2
+
+      - name: "Run - Terraform validate"
+        id: validate
+        run: terraform validate
+        working-directory: ./terraform/us-east-2
