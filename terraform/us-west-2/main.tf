@@ -31,7 +31,7 @@ resource "aws_ec2_transit_gateway" "poc-tgw" {
 }
 
 resource "aws_ec2_transit_gateway_peering_attachment_accepter" "accept_peer_us_east_1" {
-  transit_gateway_attachment_id = "tgw-0b2c8f5705cbe69c1"
+  transit_gateway_attachment_id = "tgw-attach-02dd2e6b91205d63c"
 
   tags = {
     Name = "Accept request from US-EAST-1"
