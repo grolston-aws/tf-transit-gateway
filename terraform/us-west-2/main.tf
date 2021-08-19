@@ -29,3 +29,11 @@ resource "aws_ec2_transit_gateway" "poc-tgw" {
     scenario = "${var.scenario}"
   }
 }
+
+resource "aws_ec2_transit_gateway_peering_attachment_accepter" "accept_peer_us_east_1" {
+  transit_gateway_attachment_id = "tgw-0b2c8f5705cbe69c1"
+
+  tags = {
+    Name = "Accept request from US-EAST-1"
+  }
+}
