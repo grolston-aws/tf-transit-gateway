@@ -11,10 +11,6 @@ terraform {
   }
 }
 
-###########################
-# Transit Gateway Section #
-###########################
-
 # Transit Gateway
 
 resource "aws_ec2_transit_gateway" "poc-tgw" {
