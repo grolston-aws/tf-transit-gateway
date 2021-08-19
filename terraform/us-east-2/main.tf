@@ -11,10 +11,6 @@ terraform {
   }
 }
 
-###########################
-# Transit Gateway Section #
-###########################
-
 ## Transit Gateway
 resource "aws_ec2_transit_gateway" "poc-tgw" {
   description                     = "US-EAST-2 TGW POC"
@@ -41,7 +37,6 @@ resource "aws_ec2_transit_gateway_peering_attachment" "poc-tgw-attach-to-west-2"
   }
 }
 
-
 resource "aws_ec2_transit_gateway_route_table" "tgw-prod-rt" {
   transit_gateway_id = aws_ec2_transit_gateway.poc-tgw.id
   tags = {
@@ -50,7 +45,6 @@ resource "aws_ec2_transit_gateway_route_table" "tgw-prod-rt" {
   }
   depends_on = ["aws_ec2_transit_gateway.poc-tgw"]
 }
-
 
 resource "aws_ec2_transit_gateway_route_table" "tgw-nonprod-rt" {
   transit_gateway_id = aws_ec2_transit_gateway.poc-tgw.id
