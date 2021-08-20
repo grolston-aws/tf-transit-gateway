@@ -38,6 +38,17 @@ resource "aws_ec2_transit_gateway_peering_attachment" "poc-tgw-attach-to-west-2"
   }
 }
 
+resource "aws_ec2_transit_gateway_peering_attachment" "poc-tgw-attach-to-east-2" {
+  peer_account_id         = aws_ec2_transit_gateway.poc-tgw.owner_id ## both TGWs in same account
+  peer_region             = "us-east-2"
+  peer_transit_gateway_id = "tgw-0314e7187283d26d8"
+  transit_gateway_id      = aws_ec2_transit_gateway.poc-tgw.id
+
+  tags = {
+    Name = "EAST1 TGW Peering EAST2"
+  }
+}
+
 resource "aws_ec2_transit_gateway_route_table" "tgw-prod-rt" {
   transit_gateway_id = aws_ec2_transit_gateway.poc-tgw.id
   tags = {
