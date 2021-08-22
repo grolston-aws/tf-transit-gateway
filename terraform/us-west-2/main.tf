@@ -26,21 +26,6 @@ resource "aws_ec2_transit_gateway" "poc-tgw" {
   }
 }
 
-resource "aws_ec2_transit_gateway_peering_attachment_accepter" "accept_peer_us_east_1" {
-  transit_gateway_attachment_id = "tgw-attach-02dd2e6b91205d63c"
-
-  tags = {
-    Name = "Accept request from US-EAST-1"
-  }
-}
-
-resource "aws_ec2_transit_gateway_peering_attachment_accepter" "accept_peer_us_east_2" {
-  transit_gateway_attachment_id = "tgw-attach-0667a6a38946d254a"
-
-  tags = {
-    Name = "Accept request from US-EAST-2"
-  }
-}
 
 resource "aws_ec2_transit_gateway_route_table" "tgw-prod-rt" {
   transit_gateway_id = aws_ec2_transit_gateway.poc-tgw.id
