@@ -60,8 +60,8 @@ jobs:
         run: terraform plan -input=false -no-color
         working-directory: ./terraform
 
-      # - name: "Run - Terraform Apply"
-      #   if: steps.changes.outputs.src == 'true'
-      #   id: deploy
-      #   run: terraform apply -input=false -auto-approve
-      #   working-directory: ./terraform
+      - name: "Run - Terraform Apply"
+        if: steps.changes.outputs.src == 'true'
+        id: deploy
+        run: terraform apply -input=false -auto-approve
+        working-directory: ./terraform
