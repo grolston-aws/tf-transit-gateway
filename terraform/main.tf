@@ -254,7 +254,7 @@ resource "aws_ec2_transit_gateway_peering_attachment_accepter" "west2_east2_acce
 resource "aws_ec2_transit_gateway_peering_attachment" "east1_east2_request" {
   provider = aws.east2
 
-  peer_account_id         = data.aws_caller_identity.west2.account_id
+  peer_account_id         = data.aws_caller_identity.east1.account_id
   peer_region             = "us-east-1"
   peer_transit_gateway_id = aws_ec2_transit_gateway.poc_tgw_east1.id
   transit_gateway_id      = aws_ec2_transit_gateway.poc_tgw_east2.id
