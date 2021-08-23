@@ -5,7 +5,7 @@ provider "aws" {
 terraform {
   backend "s3" {
     bucket = "tfstate-netops"
-    key    = "tgw/terraform.tfstate"
+    key    = "transitgateway/terraform.tfstate"
     region = "us-west-2"
   }
 }
