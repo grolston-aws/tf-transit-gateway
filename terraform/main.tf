@@ -10,7 +10,6 @@ terraform {
   }
 }
 
-# US-WEST2 accepts the Peering attachment.
 provider "aws" {
   alias  = "west2"
   region = var.region
