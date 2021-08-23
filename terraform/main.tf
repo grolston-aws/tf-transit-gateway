@@ -137,6 +137,13 @@ resource "aws_ram_principal_association" "ram_principal_us_east_1_tgw" {
   depends_on = [aws_ec2_transit_gateway.poc_tgw_east1]
 }
 
+resource "aws_ram_resource_association" "ram_resource_us_east_1_tgw" {
+  provider = aws.east1
+
+  resource_arn       = aws_ec2_transit_gateway.poc_tgw_east1.arn
+  resource_share_arn = aws_ram_resource_share.share_tgw_us_east1.id
+}
+
 ####################
 ## US-EAST-2
 ####################
