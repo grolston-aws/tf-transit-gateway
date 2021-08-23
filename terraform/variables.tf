@@ -5,7 +5,7 @@ variable "region" {
 
 ## Org ID is used for Principal in RAM Share
 variable "org-id" {
-  default = "arn:aws:organizations::528093727995:root/o-neknezmwm3"
+  default = "arn:aws:organizations::528093727995:organization/o-neknezmwm3"
 }
 
 ## ASNs for each TGW should be unique
