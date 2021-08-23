@@ -54,7 +54,7 @@ resource "aws_ec2_transit_gateway" "poc_tgw_west2" {
 }
 
 resource "aws_ec2_transit_gateway_route_table" "tgw_prod_rt" {
-  transit_gateway_id = aws_ec2_transit_gateway.poc-tgw-west2.id
+  transit_gateway_id = aws_ec2_transit_gateway.poc_tgw_west2.id
   tags = {
     Name = "tgw-prod-rt"
   }
@@ -118,8 +118,8 @@ resource "aws_ec2_transit_gateway_peering_attachment" "west2_east1_request" {
 
   peer_account_id         = data.aws_caller_identity.west2.account_id
   peer_region             = "us-west-2"
-  peer_transit_gateway_id = aws_ec2_transit_gateway.west2.id
-  transit_gateway_id      = aws_ec2_transit_gateway.east1.id
+  peer_transit_gateway_id = aws_ec2_transit_gateway.poc_tgw_west2.id
+  transit_gateway_id      = aws_ec2_transit_gateway.poc_tgw_east1.id
   tags = {
     Name = "US-WEST-2 to US-EAST-1 CNX"
     Side = "Requesting"
@@ -143,8 +143,8 @@ resource "aws_ec2_transit_gateway_peering_attachment" "west2_east2_request" {
 
   peer_account_id         = data.aws_caller_identity.west2.account_id
   peer_region             = "us-west-2"
-  peer_transit_gateway_id = aws_ec2_transit_gateway.west2.id
-  transit_gateway_id      = aws_ec2_transit_gateway.east2.id
+  peer_transit_gateway_id = aws_ec2_transit_gateway.poc_tgw_west2.id
+  transit_gateway_id      = aws_ec2_transit_gateway.poc_tgw_east2.id
   tags = {
     Name = "US-WEST-2 to US-EAST-2 CNX"
     Side = "Requesting"
@@ -167,8 +167,8 @@ resource "aws_ec2_transit_gateway_peering_attachment" "east1_east2_request" {
 
   peer_account_id         = data.aws_caller_identity.west2.account_id
   peer_region             = "us-east-1"
-  peer_transit_gateway_id = aws_ec2_transit_gateway.east1.id
-  transit_gateway_id      = aws_ec2_transit_gateway.east2.id
+  peer_transit_gateway_id = aws_ec2_transit_gateway.poc_tgw_east1.id
+  transit_gateway_id      = aws_ec2_transit_gateway.poc_tgw_east2.id
   tags = {
     Name = "US-EAST-1 to US-EAST-2 CNX"
     Side = "Requesting"
