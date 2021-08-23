@@ -15,7 +15,7 @@ env:
 jobs:
   terraform-apply-us-east-1:
     if: github.ref == 'refs/heads/master'
-    name: "Terraform Apply US-EAST-1"
+    name: "TF Apply"
     runs-on: ubuntu-latest
     steps:
       - name: "Setup - Checkout"
@@ -26,7 +26,7 @@ jobs:
         with:
           filters: |
             src:
-              - './terraform/us-east-1/**'
+              - './terraform/**'
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -42,7 +42,7 @@ jobs:
 
       - name: "Run - Terraform Init"
         run: terraform init -input=false
-        working-directory: ./terraform/us-east-1
+        working-directory: ./terraform
 
       - name: "Run - Terraform fmt"
         id: format
@@ -52,122 +52,16 @@ jobs:
       - name: "Run - Terraform validate"
         id: validate
         run: terraform validate
-        working-directory: ./terraform/us-east-1
+        working-directory: ./terraform
 
       - name: "Run - Terraform Plan"
         if: steps.changes.outputs.src == 'true'
         id: plan
         run: terraform plan -input=false -no-color
-        working-directory: ./terraform/us-east-1
+        working-directory: ./terraform
 
-      - name: "Run - Terraform Apply"
-        if: steps.changes.outputs.src == 'true'
-        id: deploy
-        run: terraform apply -input=false -auto-approve
-        working-directory: ./terraform/us-east-1
-
-  terraform-apply-us-west-2:
-    if: github.ref == 'refs/heads/master'
-    name: "Terraform Apply US-WEST-2"
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Setup - Checkout"
-        uses: actions/checkout@v2.1.0
-
-      - uses: dorny/paths-filter@v2
-        id: changes
-        with:
-          filters: |
-            src:
-              - './terraform/us-west-2/**'
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{env.AWS_DEFAULT_REGION}}
-
-      - name: "Setup - Terraform CLI"
-        uses: hashicorp/setup-terraform@v1
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-
-      - name: "Run - Terraform Init"
-        run: terraform init -input=false
-        working-directory: ./terraform/us-west-2
-
-      - name: "Run - Terraform fmt"
-        id: format
-        run: terraform fmt -check=true -diff=true
-        working-directory: ./terraform/us-west-2
-
-      - name: "Run - Terraform validate"
-        id: validate
-        run: terraform validate
-        working-directory: ./terraform/us-west-2
-
-      - name: "Run - Terraform Plan"
-        if: steps.changes.outputs.src == 'true'
-        id: plan
-        run: terraform plan -input=false -no-color
-        working-directory: ./terraform/us-west-2
-
-      - name: "Run - Terraform Apply"
-        if: steps.changes.outputs.src == 'true'
-        id: deploy
-        run: terraform apply -input=false -auto-approve
-        working-directory: ./terraform/us-west-2
-
-  terraform-apply-us-east-2:
-    if: github.ref == 'refs/heads/master'
-    name: "Terraform Apply US-EAST-2"
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Setup - Checkout"
-        uses: actions/checkout@v2.1.0
-
-      - uses: dorny/paths-filter@v2
-        id: changes
-        with:
-          filters: |
-            src:
-              - './terraform/us-east-2/**'
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{env.AWS_DEFAULT_REGION}}
-
-      - name: "Setup - Terraform CLI"
-        uses: hashicorp/setup-terraform@v1
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-
-      - name: "Run - Terraform Init"
-        run: terraform init -input=false
-        working-directory: ./terraform/us-east-2
-
-      - name: "Run - Terraform fmt"
-        id: format
-        run: terraform fmt -check=true -diff=true
-        working-directory: ./terraform/us-east-2
-
-      - name: "Run - Terraform validate"
-        id: validate
-        run: terraform validate
-        working-directory: ./terraform/us-east-2
-
-      - name: "Run - Terraform Plan"
-        if: steps.changes.outputs.src == 'true'
-        id: plan
-        run: terraform plan -input=false -no-color
-        working-directory: ./terraform/us-east-2
-
-      - name: "Run - Terraform Apply"
-        if: steps.changes.outputs.src == 'true'
-        id: deploy
-        run: terraform apply -input=false -auto-approve
-        working-directory: ./terraform/us-east-2
+      # - name: "Run - Terraform Apply"
+      #   if: steps.changes.outputs.src == 'true'
+      #   id: deploy
+      #   run: terraform apply -input=false -auto-approve
+      #   working-directory: ./terraform
