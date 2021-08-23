@@ -38,13 +38,15 @@ data "aws_caller_identity" "east2" {
   provider = aws.east2
 }
 
+###################
 ## US-WEST-2
+###################
 resource "aws_ec2_transit_gateway" "poc_tgw_west2" {
   provider                        = aws.west2
   description                     = "US-WEST-2 TGW POC"
   default_route_table_association = "enable"
   default_route_table_propagation = "enable"
-  amazon_side_asn                 = 64532
+  amazon_side_asn                 = var.us-west-2-asn
   auto_accept_shared_attachments  = "enable"
   dns_support                     = "enable"
 
@@ -54,14 +56,18 @@ resource "aws_ec2_transit_gateway" "poc_tgw_west2" {
 }
 
 resource "aws_ec2_transit_gateway_route_table" "tgw_prod_rt" {
+  provider = aws.west2
+
   transit_gateway_id = aws_ec2_transit_gateway.poc_tgw_west2.id
+
   tags = {
     Name = "tgw-prod-rt"
   }
+
   depends_on = ["aws_ec2_transit_gateway.poc_tgw_west2"]
 }
 
-# US-WEST-2 Share
+# US-WEST-2 TGW Share
 resource "aws_ram_resource_share" "tgw_us_west2" {
   provider = aws.west2
 
@@ -69,8 +75,10 @@ resource "aws_ram_resource_share" "tgw_us_west2" {
 
   allow_external_principals = false
   tags = {
-    Name       = "US-WEST-2-RAM-TGW"
+    Name = "US-WEST-2-RAM-TGW"
   }
+
+  depends_on = ["aws_ec2_transit_gateway.poc_tgw_west2"]
 }
 
 resource "aws_ram_principal_association" "ram_principal_us_west_2_tgw" {
@@ -78,7 +86,10 @@ resource "aws_ram_principal_association" "ram_principal_us_west_2_tgw" {
 
   principal          = "o-neknezmwm3" ## Org ID
   resource_share_arn = aws_ram_resource_share.poc_tgw_west2.id
+
+  depends_on = ["aws_ec2_transit_gateway.poc_tgw_west2"]
 }
+
 ###################
 ## US-EAST-1
 ###################
@@ -87,7 +98,7 @@ resource "aws_ec2_transit_gateway" "poc_tgw_east1" {
   description                     = "US-EAST-1 TGW POC"
   default_route_table_association = "enable"
   default_route_table_propagation = "enable"
-  amazon_side_asn                 = 64533
+  amazon_side_asn                 = var.us-east-1-asn
   auto_accept_shared_attachments  = "enable"
   dns_support                     = "enable"
 
@@ -97,7 +108,7 @@ resource "aws_ec2_transit_gateway" "poc_tgw_east1" {
 }
 
 resource "aws_ec2_transit_gateway_route_table" "tgw_prod_rt_e1" {
-  provider = aws.east1
+  provider           = aws.east1
   transit_gateway_id = aws_ec2_transit_gateway.poc_tgw_east1.id
   tags = {
     Name = "tgw-prod-rt-e1"
@@ -108,19 +119,23 @@ resource "aws_ec2_transit_gateway_route_table" "tgw_prod_rt_e1" {
 # US-EAST-1 Share
 resource "aws_ram_resource_share" "tgw_us_east1" {
   provider = aws.east1
-  name = "US-EAST-1-RAM-TGW"
+  name     = "US-EAST-1-RAM-TGW"
 
   allow_external_principals = false
   tags = {
-    Name       = "US-EAST-1-RAM-TGW"
+    Name = "US-EAST-1-RAM-TGW"
   }
+
+  depends_on = ["aws_ec2_transit_gateway.poc_tgw_east1"]
 }
 
 resource "aws_ram_principal_association" "ram_principal_us_east_1_tgw" {
   provider = aws.east1
 
-  principal          = "o-neknezmwm3" ## Org ID
+  principal          = var.org-id
   resource_share_arn = aws_ram_resource_share.poc_tgw_east1.id
+
+  depends_on = ["aws_ec2_transit_gateway.poc_tgw_east1"]
 }
 
 ####################
@@ -132,7 +147,7 @@ resource "aws_ec2_transit_gateway" "poc_tgw_east2" {
   description                     = "US-EAST-2 TGW POC"
   default_route_table_association = "enable"
   default_route_table_propagation = "enable"
-  amazon_side_asn                 = 64534
+  amazon_side_asn                 = var.us-east-2-asn
   auto_accept_shared_attachments  = "enable"
   dns_support                     = "enable"
 
@@ -142,33 +157,40 @@ resource "aws_ec2_transit_gateway" "poc_tgw_east2" {
 }
 
 resource "aws_ec2_transit_gateway_route_table" "tgw_prod_rt_e2" {
-  provider = aws.east2
+  provider           = aws.east2
   transit_gateway_id = aws_ec2_transit_gateway.poc_tgw_east2.id
   tags = {
     Name = "tgw-prod-rt-e2"
   }
+
   depends_on = ["aws_ec2_transit_gateway.poc_tgw_east2"]
 }
 
-# US-EAST-2 Share
+# US-EAST-2 TGW Share
 resource "aws_ram_resource_share" "tgw_us_east2" {
   provider = aws.east2
-  name = "US-EAST-2-RAM-TGW"
+  name     = "US-EAST-2-RAM-TGW"
 
   allow_external_principals = false
   tags = {
-    Name       = "US-EAST-2-RAM-TGW"
+    Name = "US-EAST-2-RAM-TGW"
   }
+
+  depends_on = ["aws_ec2_transit_gateway.poc_tgw_east2"]
 }
 
 resource "aws_ram_principal_association" "ram_principal_us_east_2_tgw" {
   provider = aws.east2
 
-  principal          = "o-neknezmwm3" ## Org ID
+  principal          = var.org-id
   resource_share_arn = aws_ram_resource_share.poc_tgw_east2.id
+
+  depends_on = ["aws_ec2_transit_gateway.poc_tgw_east2"]
 }
 
+######################
 ## TGW Peering
+######################
 
 # US-WEST-2 to US-EAST-1
 
@@ -183,6 +205,8 @@ resource "aws_ec2_transit_gateway_peering_attachment" "west2_east1_request" {
     Name = "US-WEST-2 to US-EAST-1 CNX"
     Side = "Requesting"
   }
+
+  depends_on = ["aws_ec2_transit_gateway.poc_tgw_east1", "aws_ec2_transit_gateway.poc_tgw_west2"]
 }
 
 resource "aws_ec2_transit_gateway_peering_attachment_accepter" "west2_east1_accept" {
@@ -193,6 +217,8 @@ resource "aws_ec2_transit_gateway_peering_attachment_accepter" "west2_east1_acce
     Name = "US-WEST-2 to US-EAST-1 CNX"
     Side = "Accepting"
   }
+
+  depends_on = ["aws_ec2_transit_gateway_peering_attachment.west2_east1_request"]
 }
 
 # US-WEST-2 to US-EAST-2
@@ -208,6 +234,8 @@ resource "aws_ec2_transit_gateway_peering_attachment" "west2_east2_request" {
     Name = "US-WEST-2 to US-EAST-2 CNX"
     Side = "Requesting"
   }
+
+  depends_on = ["aws_ec2_transit_gateway.poc_tgw_east2", "aws_ec2_transit_gateway.poc_tgw_west2"]
 }
 
 resource "aws_ec2_transit_gateway_peering_attachment_accepter" "west2_east2_accept" {
@@ -218,6 +246,8 @@ resource "aws_ec2_transit_gateway_peering_attachment_accepter" "west2_east2_acce
     Name = "US-WEST-2 to US-EAST-2 CNX"
     Side = "Accepting"
   }
+
+  depends_on = ["aws_ec2_transit_gateway_peering_attachment.west2_east2_request"]
 }
 
 # US-EAST-1 to US-EAST-2
@@ -232,6 +262,8 @@ resource "aws_ec2_transit_gateway_peering_attachment" "east1_east2_request" {
     Name = "US-EAST-1 to US-EAST-2 CNX"
     Side = "Requesting"
   }
+
+  depends_on = ["aws_ec2_transit_gateway.poc_tgw_east1", "aws_ec2_transit_gateway.poc_tgw_east2"]
 }
 
 resource "aws_ec2_transit_gateway_peering_attachment_accepter" "east1_east2_accept" {
@@ -242,4 +274,6 @@ resource "aws_ec2_transit_gateway_peering_attachment_accepter" "east1_east2_acce
     Name = "US-EAST-1 to US-EAST-2 CNX"
     Side = "Accepting"
   }
+
+  depends_on = ["aws_ec2_transit_gateway_peering_attachment.east1_east2_request"]
 }
