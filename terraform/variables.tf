@@ -3,10 +3,6 @@ variable "region" {
   default = "us-west-2"
 }
 
-variable "org-id" {
-  default = "o-neknezmwm3"
-}
-
 ## Org ID is used for Principal in RAM Share
 variable "org-id" {
   default = "o-neknezmwm3"
