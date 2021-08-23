@@ -64,7 +64,7 @@ resource "aws_ec2_transit_gateway_route_table" "tgw_prod_rt" {
     Name = "tgw-prod-rt"
   }
 
-  depends_on = ["aws_ec2_transit_gateway.poc_tgw_west2"]
+  depends_on = [aws_ec2_transit_gateway.poc_tgw_west2]
 }
 
 # US-WEST-2 TGW Share
@@ -78,7 +78,7 @@ resource "aws_ram_resource_share" "share_tgw_us_west2" {
     Name = "US-WEST-2-RAM-TGW"
   }
 
-  depends_on = ["aws_ec2_transit_gateway.poc_tgw_west2"]
+  depends_on = [aws_ec2_transit_gateway.poc_tgw_west2]
 }
 
 resource "aws_ram_principal_association" "ram_principal_us_west_2_tgw" {
@@ -87,7 +87,7 @@ resource "aws_ram_principal_association" "ram_principal_us_west_2_tgw" {
   principal          = var.org-id
   resource_share_arn = aws_ram_resource_share.share_tgw_us_west2.id
 
-  depends_on = ["aws_ec2_transit_gateway.poc_tgw_west2"]
+  depends_on = [aws_ec2_transit_gateway.poc_tgw_west2]
 }
 
 ###################
@@ -113,7 +113,7 @@ resource "aws_ec2_transit_gateway_route_table" "tgw_prod_rt_e1" {
   tags = {
     Name = "tgw-prod-rt-e1"
   }
-  depends_on = ["aws_ec2_transit_gateway.poc_tgw_east1"]
+  depends_on = [aws_ec2_transit_gateway.poc_tgw_east1]
 }
 
 # US-EAST-1 Share
@@ -126,7 +126,7 @@ resource "aws_ram_resource_share" "share_tgw_us_east1" {
     Name = "US-EAST-1-RAM-TGW"
   }
 
-  depends_on = ["aws_ec2_transit_gateway.poc_tgw_east1"]
+  depends_on = [aws_ec2_transit_gateway.poc_tgw_east1]
 }
 
 resource "aws_ram_principal_association" "ram_principal_us_east_1_tgw" {
@@ -135,7 +135,7 @@ resource "aws_ram_principal_association" "ram_principal_us_east_1_tgw" {
   principal          = var.org-id
   resource_share_arn = aws_ram_resource_share.share_tgw_us_east1.id
 
-  depends_on = ["aws_ec2_transit_gateway.poc_tgw_east1"]
+  depends_on = [aws_ec2_transit_gateway.poc_tgw_east1]
 }
 
 ####################
@@ -163,7 +163,7 @@ resource "aws_ec2_transit_gateway_route_table" "tgw_prod_rt_e2" {
     Name = "tgw-prod-rt-e2"
   }
 
-  depends_on = ["aws_ec2_transit_gateway.poc_tgw_east2"]
+  depends_on = [aws_ec2_transit_gateway.poc_tgw_east2]
 }
 
 # US-EAST-2 TGW Share
@@ -176,7 +176,7 @@ resource "aws_ram_resource_share" "share_tgw_us_east2" {
     Name = "US-EAST-2-RAM-TGW"
   }
 
-  depends_on = ["aws_ec2_transit_gateway.poc_tgw_east2"]
+  depends_on = [aws_ec2_transit_gateway.poc_tgw_east2]
 }
 
 resource "aws_ram_principal_association" "ram_principal_us_east_2_tgw" {
@@ -185,7 +185,7 @@ resource "aws_ram_principal_association" "ram_principal_us_east_2_tgw" {
   principal          = var.org-id
   resource_share_arn = aws_ram_resource_share.share_tgw_us_east2.id
 
-  depends_on = ["aws_ec2_transit_gateway.poc_tgw_east2"]
+  depends_on = [aws_ec2_transit_gateway.poc_tgw_east2]
 }
 
 ######################
@@ -206,7 +206,7 @@ resource "aws_ec2_transit_gateway_peering_attachment" "west2_east1_request" {
     Side = "Requesting"
   }
 
-  depends_on = ["aws_ec2_transit_gateway.poc_tgw_east1", "aws_ec2_transit_gateway.poc_tgw_west2"]
+  depends_on = [aws_ec2_transit_gateway.poc_tgw_east1, aws_ec2_transit_gateway.poc_tgw_west2]
 }
 
 resource "aws_ec2_transit_gateway_peering_attachment_accepter" "west2_east1_accept" {
@@ -218,7 +218,7 @@ resource "aws_ec2_transit_gateway_peering_attachment_accepter" "west2_east1_acce
     Side = "Accepting"
   }
 
-  depends_on = ["aws_ec2_transit_gateway_peering_attachment.west2_east1_request"]
+  depends_on = [aws_ec2_transit_gateway_peering_attachment.west2_east1_request]
 }
 
 # US-WEST-2 to US-EAST-2
@@ -235,7 +235,7 @@ resource "aws_ec2_transit_gateway_peering_attachment" "west2_east2_request" {
     Side = "Requesting"
   }
 
-  depends_on = ["aws_ec2_transit_gateway.poc_tgw_east2", "aws_ec2_transit_gateway.poc_tgw_west2"]
+  depends_on = [aws_ec2_transit_gateway.poc_tgw_east2, aws_ec2_transit_gateway.poc_tgw_west2]
 }
 
 resource "aws_ec2_transit_gateway_peering_attachment_accepter" "west2_east2_accept" {
@@ -247,7 +247,7 @@ resource "aws_ec2_transit_gateway_peering_attachment_accepter" "west2_east2_acce
     Side = "Accepting"
   }
 
-  depends_on = ["aws_ec2_transit_gateway_peering_attachment.west2_east2_request"]
+  depends_on = [aws_ec2_transit_gateway_peering_attachment.west2_east2_request]
 }
 
 # US-EAST-1 to US-EAST-2
@@ -263,7 +263,7 @@ resource "aws_ec2_transit_gateway_peering_attachment" "east1_east2_request" {
     Side = "Requesting"
   }
 
-  depends_on = ["aws_ec2_transit_gateway.poc_tgw_east1", "aws_ec2_transit_gateway.poc_tgw_east2"]
+  depends_on = [aws_ec2_transit_gateway.poc_tgw_east1, aws_ec2_transit_gateway.poc_tgw_east2]
 }
 
 resource "aws_ec2_transit_gateway_peering_attachment_accepter" "east1_east2_accept" {
@@ -275,5 +275,5 @@ resource "aws_ec2_transit_gateway_peering_attachment_accepter" "east1_east2_acce
     Side = "Accepting"
   }
 
-  depends_on = ["aws_ec2_transit_gateway_peering_attachment.east1_east2_request"]
+  depends_on = [aws_ec2_transit_gateway_peering_attachment.east1_east2_request]
 }
