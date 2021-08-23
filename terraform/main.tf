@@ -84,8 +84,8 @@ resource "aws_ram_resource_share" "share_tgw_us_west2" {
 resource "aws_ram_principal_association" "ram_principal_us_west_2_tgw" {
   provider = aws.west2
 
-  principal          = "o-neknezmwm3" ## Org ID
-  resource_share_arn = aws_ram_resource_share.share_tgw_west2.id
+  principal          = var.org-id
+  resource_share_arn = aws_ram_resource_share.share_tgw_us_west2.id
 
   depends_on = ["aws_ec2_transit_gateway.poc_tgw_west2"]
 }
@@ -133,7 +133,7 @@ resource "aws_ram_principal_association" "ram_principal_us_east_1_tgw" {
   provider = aws.east1
 
   principal          = var.org-id
-  resource_share_arn = aws_ram_resource_share.share_tgw_east1.id
+  resource_share_arn = aws_ram_resource_share.share_tgw_us_east1.id
 
   depends_on = ["aws_ec2_transit_gateway.poc_tgw_east1"]
 }
@@ -183,7 +183,7 @@ resource "aws_ram_principal_association" "ram_principal_us_east_2_tgw" {
   provider = aws.east2
 
   principal          = var.org-id
-  resource_share_arn = aws_ram_resource_share.share_tgw_east2.id
+  resource_share_arn = aws_ram_resource_share.share_tgw_us_east2.id
 
   depends_on = ["aws_ec2_transit_gateway.poc_tgw_east2"]
 }
