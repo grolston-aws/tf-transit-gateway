@@ -11,7 +11,7 @@ This example demonstrates how to peer multiple Transit Gateways in different reg
 
 ```sh
 terraform apply \
-	-var="region=us-west-2it sh" \
+	-var="region=us-west-2" \
 	-var="org-id=arn:aws:organizations::55555555555:organization/o-XXXXXX" \
 	-var="us-west-2-asn=64532" \
 	-var="us-east-1-asn=64533" \
